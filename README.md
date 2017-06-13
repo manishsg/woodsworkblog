@@ -1,2 +1,2 @@
-# woodsworkblog
-Code repository for articles on https://woodsworkblog.wordpress.com/
+# Woodsworkblog
+Code repository for articles on Woodsworkblog - https://woodsworkblog.wordpress.com/
