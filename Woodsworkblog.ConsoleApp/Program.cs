@@ -10,31 +10,27 @@ namespace Woodsworkblog.ConsoleApp
     {
         static void Main(string[] args)
         {
-            CrmServiceClient client = new CrmServiceClient("Url=https://abc.crm4.dynamics.com; Username=james@email.co.uk; Password=password; authtype=Office365");
-            
-            if (client.IsReady)
+            LateBound.EntityBasics();
+
+            IOrganizationService service = ConnectingTo365.BuildService();
+
+            if(service != null)
             {
-                Console.WriteLine("Connection successful");
+                LateBound.EntityBasics();
 
-                OrganizationServiceProxy organizationServiceProxy = client.OrganizationServiceProxy;
+                LateBound.AttributeTypes();
 
-                OrganizationWebProxyClient organizationWebProxyClient = client.OrganizationWebProxyClient;
+                Guid contactId = LateBound.CreateContact(service);
 
-                IOrganizationService service = organizationServiceProxy ?? organizationWebProxyClient as IOrganizationService;
+                string contactName = LateBound.GetContactLastName(service, contactId);
 
-                Console.WriteLine($"OrganizationServiceProxy is populated?  {organizationServiceProxy != null}");
+                Console.WriteLine($"Contact last name: {contactName}");
 
-                Console.WriteLine($"OrganizationWebProxyClient is populated?  {organizationWebProxyClient != null}");
+                LateBound.UpdateContact(service, contactId);
+
+                LateBound.DeleteContact(service, contactId);
             }
 
-            if (!client.IsReady)
-            {
-                Console.WriteLine("Connection failed");
-
-                Console.WriteLine(client.LastCrmError);
-                Console.WriteLine(client.LastCrmException);
-            }
-            
             Console.ReadKey();
         }
     }
